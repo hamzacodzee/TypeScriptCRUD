@@ -1,5 +1,11 @@
-.App {
+body {
   text-align: center;
+  background-color: black;
+  color: #ffffff;
+  min-height: 100vh;
+  margin: 0;
+  padding: 0;
+  font-family: monospace;
 }
 
 .App-logo {
@@ -32,7 +38,96 @@
   from {
     transform: rotate(0deg);
   }
+
   to {
     transform: rotate(360deg);
   }
+}
+
+.cardContainer {
+  display: flex;
+  justify-content: center;
+}
+
+.dialogContent {
+  border-radius: 12px;
+  background-color: rgb(61, 60, 60);
+  width: 30rem;
+  padding: 2rem;
+  /* You can add additional styles here as needed */
+}
+
+.inputContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  margin-top: 1.5rem;
+}
+
+.label {
+  text-align: start;
+  color: var(--primary-50);
+  font-weight: bold;
+}
+
+.button {
+  padding: 0.6rem;
+  margin: 0.3rem;
+  width: 40%;
+  margin-top: 2.5rem;
+  color: white;
+  background-color: transparent;
+  border: 1px solid #61dafb;
+  transition: background-color 0.3s;
+}
+
+.button:hover {
+  border: 1px solid var(--white-alpha-30);
+  transition: background-color 0.3s;
+  background-color: #61dafb;
+}
+
+.AddBtn {
+  background-color: rgb(61, 60, 60);
+  border-color: white;
+  width: 10rem;
+  font-family: monospace;
+  text-align: center ;
+}
+
+.AddBtn:hover {
+  background-color: var(--white-alpha-30);
+}
+
+.inputTextAddModal {
+  border: none;
+  color: var(--primary-50);
+  /* Adjust color as needed */
+  width: 100%;
+}
+
+.p-inputtext {
+  background-color: rgb(87, 88, 88);
+  border: none;
+  width: 100%;
+  color: #ffffff;
+}
+
+.p-datatable .p-datatable-tbody>tr>td {
+  background-color: rgb(61, 60, 60);
+  color: #ffffff;
+  text-align: center;
+}
+
+.p-datatable .p-datatable-thead>tr>th {
+  background-color: rgb(61, 60, 60);
+  color: #ffffff;
+}
+
+.HeaderTable {
+  margin-top: 5rem;
+}
+
+.p-datatable .p-column-header-content .p-column-title {
+  margin: auto;
 }
