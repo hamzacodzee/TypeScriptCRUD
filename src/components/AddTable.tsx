@@ -45,6 +45,7 @@ const AddTable: FC = () => {
                     .string()
                     .required("Name is Required")
                     .min(3, "Name Should Have Minimum 3 Characters"),
+               marks: yup.number().required("Marks is Required"),
           }),
           onSubmit: (values) => {
                toast.success(`${editUser ? "Edited" : "Added"} Successfully!`);
@@ -58,9 +59,24 @@ const AddTable: FC = () => {
                               )
                          )
                     );
+                    localStorage.setItem(
+                         "CrudUser",
+                         JSON.stringify(
+                              allUsers?.map((user) =>
+                                   user?.id === values?.id ? values : user
+                              )
+                         )
+                    );
                } else {
                     dispatch(
                          setAllUsers([
+                              ...allUsers,
+                              { ...values, id: generateUniqueId() },
+                         ])
+                    );
+                    localStorage.setItem(
+                         "CrudUser",
+                         JSON.stringify([
                               ...allUsers,
                               { ...values, id: generateUniqueId() },
                          ])
@@ -138,9 +154,13 @@ const AddTable: FC = () => {
                                              name="marks"
                                              className="inputTextAddModal"
                                              value={values?.marks}
+                                             onBlur={handleBlur}
                                              //onChange={(e) => setFieldValue('marks',e.value)}  ~~~~~~~~~~~~~~~~~~ This Also Works
                                              onValueChange={handleChange}
                                         />
+                                        <small style={{ color: "red" }}>
+                                             {touched?.marks && errors?.marks}
+                                        </small>
                                    </div>
                                    <div className={"inputContainer"}>
                                         <label

@@ -2,7 +2,7 @@ body {
   text-align: center;
   background-color: black;
   color: #ffffff;
-  min-height: 100vh;
+  min-height: 80vh;
   margin: 0;
   padding: 0;
   font-family: monospace;
@@ -21,7 +21,6 @@ body {
 
 .App-header {
   background-color: #282c34;
-  min-height: 100vh;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -113,7 +112,7 @@ body {
   color: #ffffff;
 }
 
-.p-datatable .p-datatable-tbody>tr>td {
+.p-datatable .p-datatable-tbody > tr > td {
   background-color: rgb(61, 60, 60);
   color: #ffffff;
   text-align: center;

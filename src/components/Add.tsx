@@ -7,6 +7,9 @@ const Add: FC = () => {
      return (
           <div>
                <AddTable />
+               <div>
+                    <input type="text" />
+               </div>
                <ViewTable/>
           </div>
      );

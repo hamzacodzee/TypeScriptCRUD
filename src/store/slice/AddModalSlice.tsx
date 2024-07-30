@@ -10,14 +10,7 @@ interface AddModalState {
 const initialState: AddModalState = {
      visible: false,
      editUser: null,
-     allUsers: [
-          // {
-          //      id: generateUniqueId(),
-          //      s_name: "abc",
-          //      marks: 100,
-          //      result: true,
-          // },
-     ],
+     allUsers: JSON.parse(localStorage.getItem("CrudUser") || "[]")
 };
 
 export const addModalSlice = createSlice({

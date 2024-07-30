@@ -22,6 +22,12 @@ const ViewTable: FC = () => {
                     allUsers.filter((user: AddStudent) => user?.id !== id)
                )
           );
+          localStorage.setItem(
+               "CrudUser",
+               JSON.stringify(
+                    allUsers.filter((user: AddStudent) => user?.id !== id)
+               )
+          );
           toast.success("Deleted Successfully!");
      };
 
@@ -31,12 +37,30 @@ const ViewTable: FC = () => {
                     <EditTable data={data} />
                     <Button
                          style={{
-                              backgroundColor:"transparent",border:"none",fontSize:"1.2rem", margin:0, padding:0
+                              backgroundColor: "transparent",
+                              border: "none",
+                              fontSize: "1.2rem",
+                              margin: 0,
+                              padding: 0,
                          }}
                          label="❌"
                          onClick={() => handleDelete(data?.id)}
                     />
                </div>
+          );
+     };
+
+     const nameTemplate = (data: AddStudent) => {
+          return (
+               <p
+                    style={{
+                         width: "10rem",
+                         wordBreak: "break-all",
+                         display: "inline-block",
+                    }}
+               >
+                    {data.s_name}
+               </p>
           );
      };
 
@@ -50,7 +74,11 @@ const ViewTable: FC = () => {
                }}
           >
                <DataTable value={allUsers} tableStyle={{ width: "50rem" }}>
-                    <Column field="s_name" header="Name"></Column>
+                    <Column
+                         field="s_name"
+                         header="Name"
+                         body={nameTemplate}
+                    ></Column>
                     <Column field="marks" header="Marks"></Column>
                     <Column
                          field="result"
