@@ -17,17 +17,8 @@ const ViewTable: FC = () => {
      };
 
      const handleDelete = (id: string) => {
-          dispatch(
-               setAllUsers(
-                    allUsers.filter((user: AddStudent) => user?.id !== id)
-               )
-          );
-          localStorage.setItem(
-               "CrudUser",
-               JSON.stringify(
-                    allUsers.filter((user: AddStudent) => user?.id !== id)
-               )
-          );
+          dispatch(setAllUsers(allUsers.filter((user: AddStudent) => user?.id !== id)));
+          localStorage.setItem("CrudUser", JSON.stringify(allUsers.filter((user: AddStudent) => user?.id !== id)));
           toast.success("Deleted Successfully!");
      };
 

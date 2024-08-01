@@ -6,12 +6,7 @@ import { toast } from "react-toastify";
 import * as yup from "yup";
 import { RootState } from "../store/store";
 import { useDispatch, useSelector } from "react-redux";
-import {
-     setAllUsers,
-     setEditUser,
-     setSearch,
-     setVisible,
-} from "../store/slice/AddModalSlice";
+import { setAllUsers, setEditUser, setSearch, setVisible } from "../store/slice/AddModalSlice";
 import { AddStudent } from "../helper/declarations";
 import { generateUniqueId } from "../helper/functions";
 import AddEditDialog from "./AddEditDialog";
@@ -29,34 +24,13 @@ const AddTable: FC = () => {
      };
 
      const handleEditing = (values: AddStudent) => {
-          dispatch(
-               setAllUsers(
-                    allUsers?.map((user) =>
-                         user?.id === values?.id ? values : user
-                    )
-               )
-          );
-          localStorage.setItem(
-               "CrudUser",
-               JSON.stringify(
-                    allUsers?.map((user) =>
-                         user?.id === values?.id ? values : user
-                    )
-               )
-          );
+          dispatch(setAllUsers(allUsers?.map((user) => user?.id === values?.id ? values : user)));
+          localStorage.setItem("CrudUser", JSON.stringify(allUsers?.map((user) => user?.id === values?.id ? values : user)));
      };
 
      const handleAdding = (values: AddStudent) => {
-          dispatch(
-               setAllUsers([...allUsers, { ...values, id: generateUniqueId() }])
-          );
-          localStorage.setItem(
-               "CrudUser",
-               JSON.stringify([
-                    ...allUsers,
-                    { ...values, id: generateUniqueId() },
-               ])
-          );
+          dispatch(setAllUsers([...allUsers, { ...values, id: generateUniqueId() }]));
+          localStorage.setItem("CrudUser", JSON.stringify([...allUsers, { ...values, id: generateUniqueId() }]));
      };
 
      const handleSubmitForm = (values: AddStudent) => {
