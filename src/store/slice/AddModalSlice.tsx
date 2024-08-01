@@ -5,12 +5,14 @@ interface AddModalState {
      visible: boolean;
      allUsers: AddStudent[];
      editUser: AddStudent | null;
+     search: string;
 }
 
 const initialState: AddModalState = {
      visible: false,
      editUser: null,
-     allUsers: JSON.parse(localStorage.getItem("CrudUser") || "[]")
+     allUsers: JSON.parse(localStorage.getItem("CrudUser") || "[]"),
+     search: "",
 };
 
 export const addModalSlice = createSlice({
@@ -19,6 +21,9 @@ export const addModalSlice = createSlice({
      reducers: {
           setVisible: (state, action: PayloadAction<boolean>) => {
                state.visible = action.payload;
+          },
+          setSearch: (state, action: PayloadAction<string>) => {
+               state.search = action.payload;
           },
           setAllUsers: (state, action: PayloadAction<AddStudent[]>) => {
                state.allUsers = action.payload;
@@ -29,6 +34,6 @@ export const addModalSlice = createSlice({
      },
 });
 
-export const { setVisible, setAllUsers, setEditUser } = addModalSlice.actions;
+export const { setVisible, setAllUsers, setEditUser,setSearch } = addModalSlice.actions;
 
 export default addModalSlice.reducer;

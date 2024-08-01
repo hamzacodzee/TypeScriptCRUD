@@ -91,7 +91,7 @@ body {
   border-color: white;
   width: 10rem;
   font-family: monospace;
-  text-align: center ;
+  text-align: center;
 }
 
 .AddBtn:hover {
@@ -112,7 +112,7 @@ body {
   color: #ffffff;
 }
 
-.p-datatable .p-datatable-tbody > tr > td {
+.p-datatable .p-datatable-tbody>tr>td {
   background-color: rgb(61, 60, 60);
   color: #ffffff;
   text-align: center;
@@ -129,4 +129,16 @@ body {
 
 .p-datatable .p-column-header-content .p-column-title {
   margin: auto;
+}
+
+.input_text_search {
+  border: 1px solid white;
+  width: 20rem;
+  margin-left: 2rem;
+  background-color: rgb(61, 60, 60);
+}
+
+.input_text_search::placeholder {
+  color: lightgrey;
+  opacity: 1;
 }

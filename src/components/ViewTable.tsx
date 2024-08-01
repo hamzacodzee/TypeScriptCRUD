@@ -10,7 +10,7 @@ import EditTable from "./EditTable";
 import { AddStudent } from "../helper/declarations";
 
 const ViewTable: FC = () => {
-     const { allUsers } = useSelector((state: RootState) => state.addModal);
+     const { allUsers,search } = useSelector((state: RootState) => state.addModal);
      const dispatch = useDispatch();
      const resultTemplate = (data: AddStudent) => {
           return <p>{data?.result ? "Pass" : "Fail"}</p>;
@@ -73,7 +73,14 @@ const ViewTable: FC = () => {
                     justifyContent: "center",
                }}
           >
-               <DataTable value={allUsers} tableStyle={{ width: "50rem" }}>
+               <DataTable
+                    value={allUsers?.filter((item) =>
+                         item.s_name
+                              .toLowerCase()
+                              .includes(search.toLowerCase())
+                    )}
+                    tableStyle={{ width: "50rem" }}
+               >
                     <Column
                          field="s_name"
                          header="Name"
