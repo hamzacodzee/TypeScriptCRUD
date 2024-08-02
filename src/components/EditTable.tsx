@@ -24,7 +24,6 @@ const EditTable: FC<EditTableProps> = ({ data }) => {
                     label="📝"
                     onClick={() => {
                          dispatch(setVisible(true));
-                         console.log("data", data);
                          dispatch(getUserById({ id: data._id, actionType: "edit" }));
                     }}
                />

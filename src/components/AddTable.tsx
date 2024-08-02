@@ -59,7 +59,6 @@ const AddTable: FC = () => {
      });
 
      useEffect(() => {
-          console.log("editUser?._id",editUser?._id)
           if (editUser) {
                setValues({
                     _id: editUser._id || "",
