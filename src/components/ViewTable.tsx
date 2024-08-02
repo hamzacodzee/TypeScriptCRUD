@@ -2,24 +2,22 @@ import React, { FC, memo } from "react";
 import { DataTable } from "primereact/datatable";
 import { Column } from "primereact/column";
 import { useDispatch, useSelector } from "react-redux";
-import { RootState } from "../store/store";
-import { setAllUsers } from "../store/slice/AddModalSlice";
+import { AppDispatch, RootState } from "../store/store";
+import { deleteUser } from "../store/slice/AddModalSlice";
 import { Button } from "primereact/button";
-import { toast } from "react-toastify";
 import EditTable from "./EditTable";
 import { AddStudent } from "../helper/declarations";
+import { Skeleton } from 'primereact/skeleton';
 
 const ViewTable: FC = () => {
-     const { allUsers,search } = useSelector((state: RootState) => state.addModal);
-     const dispatch = useDispatch();
+     const { getUserState, search, crudLoading } = useSelector((state: RootState) => state.addModal);
+     const dispatch = useDispatch<AppDispatch>();
      const resultTemplate = (data: AddStudent) => {
           return <p>{data?.result ? "Pass" : "Fail"}</p>;
      };
 
-     const handleDelete = (id: string) => {
-          dispatch(setAllUsers(allUsers.filter((user: AddStudent) => user?.id !== id)));
-          localStorage.setItem("CrudUser", JSON.stringify(allUsers.filter((user: AddStudent) => user?.id !== id)));
-          toast.success("Deleted Successfully!");
+     const handleDelete = (_id: string) => {
+          dispatch(deleteUser({ _id }));
      };
 
      const actionTemplate = (data: AddStudent) => {
@@ -35,7 +33,7 @@ const ViewTable: FC = () => {
                               padding: 0,
                          }}
                          label="❌"
-                         onClick={() => handleDelete(data?.id)}
+                         onClick={() => handleDelete(data?._id)}
                     />
                </div>
           );
@@ -65,25 +63,34 @@ const ViewTable: FC = () => {
                }}
           >
                <DataTable
-                    value={allUsers?.filter((item) =>
-                         item.s_name
-                              .toLowerCase()
-                              .includes(search.toLowerCase())
+                    value={crudLoading ? Array(getUserState?.length || 1).fill({}) : getUserState?.filter((item: AddStudent) =>
+                         item.s_name.toLowerCase().includes(search.toLowerCase())
                     )}
                     tableStyle={{ width: "50rem" }}
                >
-                    <Column
-                         field="s_name"
-                         header="Name"
-                         body={nameTemplate}
-                    ></Column>
-                    <Column field="marks" header="Marks"></Column>
-                    <Column
-                         field="result"
-                         header="Result"
-                         body={resultTemplate}
-                    ></Column>
-                    <Column header="Action" body={actionTemplate}></Column>
+                    <Column 
+                         field="s_name" 
+                         header="Name" 
+                         body={crudLoading ? <Skeleton /> : nameTemplate}
+                         style={crudLoading ? { height: "4rem" } : undefined}
+                    />
+                    <Column 
+                         field="marks" 
+                         header="Marks"
+                         body={crudLoading ? <Skeleton /> : undefined}
+                         style={crudLoading ? { height: "4rem" } : undefined}
+                    />
+                    <Column 
+                         field="result" 
+                         header="Result" 
+                         body={crudLoading ? <Skeleton /> : resultTemplate}
+                         style={crudLoading ? { height: "4rem" } : undefined}
+                    />
+                    <Column 
+                         header="Action" 
+                         body={crudLoading ? <Skeleton /> : actionTemplate}
+                         style={crudLoading ? { height: "4rem" } : undefined}
+                    />
                </DataTable>
           </div>
      );

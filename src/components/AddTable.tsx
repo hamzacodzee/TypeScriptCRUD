@@ -2,39 +2,32 @@ import React, { FC, memo, useEffect } from "react";
 import { Button } from "primereact/button";
 import { InputText } from "primereact/inputtext";
 import { useFormik } from "formik";
-import { toast } from "react-toastify";
 import * as yup from "yup";
-import { RootState } from "../store/store";
+import { AppDispatch, RootState } from "../store/store";
 import { useDispatch, useSelector } from "react-redux";
-import { setAllUsers, setEditUser, setSearch, setVisible } from "../store/slice/AddModalSlice";
-import { AddStudent } from "../helper/declarations";
-import { generateUniqueId } from "../helper/functions";
+import { addUser, setEditUser, setSearch, setVisible, updateUser } from "../store/slice/AddModalSlice";
+import { AddStudent, initialValuesObj } from "../helper/declarations";
 import AddEditDialog from "./AddEditDialog";
 
 const AddTable: FC = () => {
-     const dispatch = useDispatch();
-     const { allUsers, editUser, search } = useSelector(
+     const dispatch = useDispatch<AppDispatch>();
+     const { 
+          // allUsers,
+           editUser, search } = useSelector(
           (state: RootState) => state.addModal
      );
-     const initialValues: AddStudent = {
-          id: editUser?.id || "",
-          s_name: editUser?.s_name || "",
-          marks: editUser?.marks || 0,
-          result: editUser?.result || false,
+
+     const initialValues: AddStudent = JSON.parse(JSON.stringify(initialValuesObj));
+
+     const handleEditing = async (values: AddStudent) => {
+          await dispatch(updateUser(values));
      };
 
-     const handleEditing = (values: AddStudent) => {
-          dispatch(setAllUsers(allUsers?.map((user) => user?.id === values?.id ? values : user)));
-          localStorage.setItem("CrudUser", JSON.stringify(allUsers?.map((user) => user?.id === values?.id ? values : user)));
-     };
-
-     const handleAdding = (values: AddStudent) => {
-          dispatch(setAllUsers([...allUsers, { ...values, id: generateUniqueId() }]));
-          localStorage.setItem("CrudUser", JSON.stringify([...allUsers, { ...values, id: generateUniqueId() }]));
+     const handleAdding = async (values: AddStudent) => {
+          await dispatch(addUser(values));
      };
 
      const handleSubmitForm = (values: AddStudent) => {
-          toast.success(`${editUser ? "Edited" : "Added"} Successfully!`);
           dispatch(setVisible(false));
           resetForm();
           if (editUser) {
@@ -66,9 +59,10 @@ const AddTable: FC = () => {
      });
 
      useEffect(() => {
+          console.log("editUser?._id",editUser?._id)
           if (editUser) {
                setValues({
-                    id: editUser.id || "",
+                    _id: editUser._id || "",
                     s_name: editUser.s_name || "",
                     marks: editUser.marks || 0,
                     result: editUser.result || false,
