@@ -1,5 +1,10 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { AddStudent, initialValuesObj } from "../../helper/declarations";
+import {
+     AddStudent,
+     initialValuesObj,
+     limit,
+     PaginationValuesObj,
+} from "../../helper/declarations";
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
 import { toast } from "react-toastify";
@@ -11,9 +16,11 @@ interface AddModalState {
      addData: AddStudent;
      getUserByIdState: AddStudent | null;
      getUserState: AddStudent[] | null;
+     filteredUserState: AddStudent[] | null;
      deleteUserState: AddStudent | null;
      updateUserState: AddStudent | null;
      crudLoading: boolean;
+     paginationValues: PaginationValuesObj;
 }
 
 const initialState: AddModalState = {
@@ -23,16 +30,25 @@ const initialState: AddModalState = {
      addData: JSON.parse(JSON.stringify(initialValuesObj)),
      getUserByIdState: null,
      getUserState: null,
+     filteredUserState: null,
      deleteUserState: null,
      updateUserState: null,
      crudLoading: false,
+     paginationValues: {
+          count: 0,
+          start: 1,
+          end: limit,
+     },
 };
 
 const host = "https://typescriptcrudbackend.onrender.com/api/crud";
 
 export const addUser = createAsyncThunk(
      `crud/addUser`,
-     async (userData: { s_name: string; marks: number; result: boolean }, { dispatch }) => {
+     async (
+          userData: { s_name: string; marks: number; result: boolean },
+          { dispatch }
+     ) => {
           try {
                const response = await axios.post(`${host}/add`, userData);
                toast.success("Added Successfully!");
@@ -46,10 +62,21 @@ export const addUser = createAsyncThunk(
 
 export const updateUser = createAsyncThunk(
      `crud/updateUser`,
-     async (userData: { _id: string; s_name: string; marks: number; result: boolean }, { dispatch }) => {
+     async (
+          userData: {
+               _id: string;
+               s_name: string;
+               marks: number;
+               result: boolean;
+          },
+          { dispatch }
+     ) => {
           try {
                const { _id, ...updateData } = userData;
-               const response = await axios.put(`${host}/edit/${_id}`, updateData);
+               const response = await axios.put(
+                    `${host}/edit/${_id}`,
+                    updateData
+               );
                toast.success("Updated Successfully!");
                dispatch(getUser());
                return response.data.crud;
@@ -60,34 +87,36 @@ export const updateUser = createAsyncThunk(
 );
 
 export const deleteUser = createAsyncThunk(
-     `crud/deleteUser`,  
+     `crud/deleteUser`,
      async (userData: { _id: string }, { dispatch }) => {
           try {
-               const response = await axios.delete(`${host}/delete/${userData._id}`);
+               const response = await axios.delete(
+                    `${host}/delete/${userData._id}`
+               );
                toast.success("Deleted Successfully!");
                dispatch(getUser());
                return response.data.crud;
           } catch (error: any) {
-               return error.response.data
+               return error.response.data;
           }
      }
 );
 
-export const getUser = createAsyncThunk(
-     `crud/getUser`,
-     async () => {
-          try {
-               const response = await axios.get(`${host}/get`);
-               return response.data.crud;
-          } catch (error: any) {
-               return error.response.data
-          }
+export const getUser = createAsyncThunk(`crud/getUser`, async () => {
+     try {
+          const response = await axios.get(`${host}/get`);
+          return response.data.crud;
+     } catch (error: any) {
+          return error.response.data;
      }
-);
+});
 
 export const getUserById = createAsyncThunk(
      `crud/getUserById`,
-     async ({ id, actionType }: { id: string; actionType: string }, { dispatch }) => {
+     async (
+          { id, actionType }: { id: string; actionType: string },
+          { dispatch }
+     ) => {
           try {
                const response = await axios.get(`${host}/get/${id}`);
                if (actionType === "edit") {
@@ -95,7 +124,7 @@ export const getUserById = createAsyncThunk(
                }
                return response.data.crud;
           } catch (error: any) {
-               return error.response.data
+               return error.response.data;
           }
      }
 );
@@ -113,6 +142,18 @@ export const addModalSlice = createSlice({
           setEditUser: (state, action: PayloadAction<AddStudent | null>) => {
                state.editUser = action.payload;
           },
+          setPaginationValues: (
+               state,
+               action: PayloadAction<PaginationValuesObj>
+          ) => {
+               state.paginationValues = action.payload;
+          },
+          setFilteredUserState: (
+               state,
+               action: PayloadAction<AddStudent[] | null>
+          ) => {
+               state.filteredUserState = action.payload;
+          },
      },
      extraReducers: (builder) => {
           builder
@@ -120,7 +161,12 @@ export const addModalSlice = createSlice({
                     state.crudLoading = true;
                })
                .addCase(addUser.rejected, (state) => {
-                    state.addData = { _id: '', s_name: '', marks: 0, result: false };
+                    state.addData = {
+                         _id: "",
+                         s_name: "",
+                         marks: 0,
+                         result: false,
+                    };
                     state.crudLoading = false;
                })
                .addCase(addUser.fulfilled, (state, action) => {
@@ -131,7 +177,12 @@ export const addModalSlice = createSlice({
                     state.crudLoading = true;
                })
                .addCase(updateUser.rejected, (state) => {
-                    state.updateUserState = { _id: '', s_name: '', marks: 0, result: false };
+                    state.updateUserState = {
+                         _id: "",
+                         s_name: "",
+                         marks: 0,
+                         result: false,
+                    };
                     state.crudLoading = false;
                })
                .addCase(updateUser.fulfilled, (state, action) => {
@@ -142,7 +193,12 @@ export const addModalSlice = createSlice({
                     state.crudLoading = true;
                })
                .addCase(deleteUser.rejected, (state) => {
-                    state.deleteUserState = { _id: '', s_name: '', marks: 0, result: false };
+                    state.deleteUserState = {
+                         _id: "",
+                         s_name: "",
+                         marks: 0,
+                         result: false,
+                    };
                     state.crudLoading = false;
                })
                .addCase(deleteUser.fulfilled, (state, action) => {
@@ -171,9 +227,15 @@ export const addModalSlice = createSlice({
                     state.getUserByIdState = action.payload;
                     state.crudLoading = false;
                });
-     }
+     },
 });
 
-export const { setVisible, setEditUser, setSearch } = addModalSlice.actions;
+export const {
+     setVisible,
+     setEditUser,
+     setSearch,
+     setPaginationValues,
+     setFilteredUserState,
+} = addModalSlice.actions;
 
 export default addModalSlice.reducer;
